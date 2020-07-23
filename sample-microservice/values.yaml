@@ -5,9 +5,9 @@
 replicaCount: 1
 
 image:
-  repository: nginx
-  tag: stable
-  pullPolicy: IfNotPresent
+  repository: 665773218278.dkr.ecr.us-east-2.amazonaws.com/sample-spinnaker-service
+  tag: 57652ec
+  pullPolicy: Always
 
 nameOverride: ""
 fullnameOverride: ""
