@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: 665773218278.dkr.ecr.us-east-2.amazonaws.com/sample-spinnaker-service
-  tag: 57652ec
+  tag: 2b4286f
   pullPolicy: Always
 
 nameOverride: ""
