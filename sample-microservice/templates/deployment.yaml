@@ -20,6 +20,8 @@ spec:
         app.kubernetes.io/name: {{ include "sample-microservice.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+      imagePullSecrets:
+        - name: artifactory-docker
       containers:
         - name: {{ .Chart.Name }}
           image: {{ .Values.image.repository }}
