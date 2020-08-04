@@ -6,10 +6,12 @@ chart_version := $(shell helm show chart $(chart_name) | awk '/version/ { print 
 chart_path    := $(chart_name)-$(chart_version).tgz
 chart_url     := https://artifactory.bettermg.com/artifactory/helm/$(chart_name)/$(chart_path)
 
-image_name_and_tag  := $(app_name):$(git_short_sha)
-image_repo_push_uri := artifactory.bettermg.com/docker/$(image_name_and_tag)
-docker_repo_url     := https://artifactory.bettermg.com/artifactory/docker/$(app_name)
-image_reference_url := $(docker_repo_url)/$(app_name)/$(git_short_sha)
+image_name          := $(app_name)
+image_name_and_tag  := $(image_name):$(git_short_sha)
+docker_repo_uri     := artifactory.bettermg.com/docker/$(app_name)
+image_repo_uri      := artifactory.bettermg.com/docker/$(image_name_and_tag)
+# docker_repo_url     := artifactory.bettermg.com/artifactory/docker/$(app_name)
+# image_reference_url := $(docker_repo_url)/$(app_name)/$(git_short_sha)
 
 deploy_helm_chart:
 	@echo "Packaging chart $(chart_name)"
@@ -23,9 +25,9 @@ chart_version:
 deploy_docker_image:
 	@echo "Building image $(image_name_and_tag)"
 	docker build -t $(image_name_and_tag) .
-	docker tag $(image_name_and_tag) $(image_repo_push_uri)
-	@echo "Deploying $(image_name_and_tag) to $(image_repo_push_uri)"
-	docker push $(image_repo_push_uri)
+	docker tag $(image_name_and_tag) $(image_repo_uri)
+	@echo "Deploying $(image_name_and_tag) to $(image_repo_uri)"
+	docker push $(image_repo_uri)
 
 trigger_spinnaker_deploy:
 	curl -v -X POST http://localhost:9000/gate/webhooks/webhook/artifactory-helm-docker \
@@ -40,8 +42,8 @@ trigger_spinnaker_deploy:
 			}, \
 			{ \
 				"type": "docker/image", \
-				"name": "$(docker_repo_url)", \
-				"reference": "$(image_reference_url)" \
+				"name": "$(docker_repo_uri)", \
+				"reference": "$(image_repo_uri)" \
 			} \
 		] \
 	}'
