@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: artifactory.bettermg.com/docker/sample-spinnaker-service
-  tag: latest
+  # tag: latest
   pullPolicy: Always
 
 nameOverride: ""
